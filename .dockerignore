@@ -1,7 +1,8 @@
 .env
-.venv/
-__pycache__/
-*.py[cod]
+.git
+.venv
+__pycache__
+data
 seen_houses.json
 bot_settings.json
-data/
+*.py[cod]

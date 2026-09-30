@@ -1,0 +1,12 @@
+services:
+  rental-bot:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATA_DIR: /data
+      CHROME_PATH: /usr/bin/chromium
+      CHROME_HEADLESS: "false"
+    volumes:
+      - ./data:/data
