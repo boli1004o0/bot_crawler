@@ -15,6 +15,7 @@ concurrency:
 jobs:
   check-rentals:
     runs-on: ubuntu-24.04
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v4
 
@@ -35,7 +36,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Check listings and send Discord notifications
-        run: python github_actions.py
+        run: python -u github_actions.py
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           MAX_PRICE_TWD: "9999"

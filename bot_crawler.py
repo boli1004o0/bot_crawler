@@ -88,9 +88,11 @@ def fetch_zhunan_rentals_with_browser():
         co.set_argument('--disable-dev-shm-usage')
         co.set_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
         
+        print("[+] 正在啟動 Chromium...")
         page = ChromiumPage(co)
         
         # 先寫入苗栗縣 (7) Cookie 防止 591 自動跳轉預設縣市
+        print("[+] 正在開啟 591 首頁...")
         page.get("https://rent.591.com.tw")
         page.set.cookies({'name': 'urlJumpIp', 'value': '7', 'domain': '.591.com.tw'})
         
