@@ -28,7 +28,10 @@ def send_listing(webhook_url, house):
     request = Request(
         webhook_url,
         data=json.dumps({"embeds": [embed]}).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "DiscordBot (https://github.com/boli1004o0/bot_crawler, 1.0)",
+        },
         method="POST",
     )
     try:
