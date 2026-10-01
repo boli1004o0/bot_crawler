@@ -18,7 +18,7 @@ SEEN_HOUSES_FILE = DATA_DIR / "seen_houses.json"
 SETTINGS_FILE = DATA_DIR / "bot_settings.json"
 
 DEFAULT_CONFIG = {
-    "max_price": 9999,
+    "max_price": 11001,
     "interval_min": 5,
     "is_active": True
 }

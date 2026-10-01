@@ -48,7 +48,7 @@ def main():
     if not webhook_url:
         raise SystemExit("Missing DISCORD_WEBHOOK_URL secret")
 
-    max_price = int(os.environ.get("MAX_PRICE_TWD", "9999"))
+    max_price = int(os.environ.get("MAX_PRICE_TWD", "11001"))
     seen_houses = load_seen_houses()
     houses = fetch_zhunan_rentals_with_browser()
     new_count = 0

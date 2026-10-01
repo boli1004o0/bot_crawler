@@ -2,7 +2,7 @@ name: Check 591 rentals
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 */3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -39,6 +39,6 @@ jobs:
         run: python -u github_actions.py
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          MAX_PRICE_TWD: "9999"
+          MAX_PRICE_TWD: "11001"
           CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
           CHROME_HEADLESS: "true"
