@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from bot_crawler import fetch_zhunan_rentals_with_browser, load_seen_houses, save_seen_houses
@@ -30,9 +31,13 @@ def send_listing(webhook_url, house):
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with urlopen(request, timeout=20) as response:
-        if response.status not in (200, 204):
-            raise RuntimeError(f"Discord webhook returned HTTP {response.status}")
+    try:
+        with urlopen(request, timeout=20) as response:
+            if response.status not in (200, 204):
+                raise RuntimeError(f"Discord webhook returned HTTP {response.status}")
+    except HTTPError as error:
+        detail = error.read().decode("utf-8", errors="replace").strip()
+        raise RuntimeError(f"Discord webhook returned HTTP {error.code}: {detail}") from error
 
 
 def main():
