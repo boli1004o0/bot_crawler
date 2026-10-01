@@ -11,43 +11,15 @@ Discord bot that checks the newest 10 Zhu-Nan rental listings on 591 and sends q
 
 The rent limit defaults to 9,999 TWD. Settings and already-notified listing IDs are stored in the data directory.
 
-## Deploy on an Oracle Cloud Always Free VM
+## Deploy with GitHub Actions
 
-Create an Always Free eligible VM in Oracle Cloud. An Ampere A1 Flex VM with Ubuntu 24.04 ARM, 1 OCPU, and 6 GB RAM is a suitable starting size when capacity is available. Free capacity varies by region.
+The scheduled workflow checks listings every five minutes and sends matching listings through a Discord webhook. It runs once per check, so the Discord slash commands are not available in this deployment mode.
 
-SSH into the VM and install Docker, Compose, and Git:
+1. In Discord, create a webhook for the notification channel and copy its URL.
+2. In the GitHub repository, open **Settings > Secrets and variables > Actions**, create a repository secret named `DISCORD_WEBHOOK_URL`, and paste the webhook URL as its value. Do not commit the URL or put it in a workflow file.
+3. Push this workflow to the repository's default branch.
+4. In **Actions**, run **Check 591 rentals** once with **Run workflow** to test it. Scheduled runs may be delayed by GitHub during busy periods.
 
-```bash
-sudo apt update
-sudo apt install -y git docker.io docker-compose-v2
-sudo systemctl enable --now docker
-```
+The rent limit defaults to 9,999 TWD in `.github/workflows/rental-check.yml`. The workflow caches seen listing IDs; its first run may notify matching listings already on the page.
 
-Clone the repository and create the private environment file:
-
-```bash
-git clone https://github.com/boli1004o0/bot_crawler.git
-cd bot_crawler
-cp .env.example .env
-nano .env
-```
-
-Set `DISCORD_BOT_TOKEN` and `DISCORD_CHANNEL_ID` in `.env`. Do not commit or share this file. Invite the bot to your Discord server with the `applications.commands`, `Send Messages`, and `Embed Links` permissions.
-
-Create the persistent data folder and start the bot:
-
-```bash
-mkdir -p data
-sudo chown 10001:10001 data
-sudo docker compose up -d --build
-sudo docker compose logs -f
-```
-
-Use `/status`, `/pause`, and `/resume` in Discord. The pause/resume commands require Discord server administrator permission. The bot only needs outbound network access; do not open public inbound ports for it. Oracle's Always Free capacity and account eligibility are subject to Oracle's current terms.
-
-To deploy a later GitHub update:
-
-```bash
-git pull
-sudo docker compose up -d --build
-```
+The existing Docker deployment remains available for a continuously running Discord bot with slash commands.

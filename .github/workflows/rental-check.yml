@@ -1,0 +1,43 @@
+name: Check 591 rentals
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rental-check
+  cancel-in-progress: false
+
+jobs:
+  check-rentals:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+
+      - uses: actions/cache@v4
+        with:
+          path: seen_houses.json
+          key: seen-houses-${{ github.run_id }}
+          restore-keys: seen-houses-
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check listings and send Discord notifications
+        run: python github_actions.py
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          MAX_PRICE_TWD: "9999"
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          CHROME_HEADLESS: "true"
