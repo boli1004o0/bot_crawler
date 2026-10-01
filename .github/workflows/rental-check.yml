@@ -1,8 +1,6 @@
 name: Check 591 rentals
 
 on:
-  schedule:
-    - cron: "0 */3 * * *"
   workflow_dispatch:
 
 permissions:
